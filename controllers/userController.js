@@ -22,4 +22,19 @@ exports.getAllUser = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: `Erreur` })
     }
-}
+};
+
+exports.updateUser = async (req, res) => {
+    const {id} = req.params;
+    const newName = req.body.name;
+    const newPassword = req.body.newPassword;
+    try {
+        const updateUser = await User.findByIdAndUpdate(id, { name: newName, password: newPassword }, { new: true });
+        if(!updateUser){
+            return res.status(400).json({ message: 'Utilisateur introuvable' });
+        }
+        res.status(200).json({ message: "Utilisateur mis à jour" });
+    } catch (error) {
+        res.status(500).json({ message: "Erreur lors de la mis à jour de l'utilisateur", error });
+    }
+};
